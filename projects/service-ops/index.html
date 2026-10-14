@@ -71,7 +71,8 @@ h1 { font-size: clamp(28px, 4.5vw, 42px); line-height: 1.12; letter-spacing: -0.
 .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
 @media (min-width: 1000px) { .kpis { grid-template-columns: repeat(6, 1fr); } }
 @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
-.kpi .value { overflow-wrap: anywhere; }
+.kpi .value { white-space: nowrap; }
+.kpi .value.long { font-size: 22px; line-height: 34px; }
 .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
 .kpi .label { font-size: 12px; color: var(--muted); font-weight: 500; }
 .kpi .value { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-top: 6px; }
@@ -425,7 +426,7 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
       ['Still open', fmt.format(n - closed), pct((n - closed) / n) + ' of requests at extract']
     ];
     document.getElementById('kpis').innerHTML = kp.map(function (k) {
-      return '<div class="kpi"><div class="label">' + k[0] + '</div><div class="value">' + k[1] + '</div><div class="sub">' + k[2] + '</div></div>';
+      return '<div class="kpi"><div class="label">' + k[0] + '</div><div class="value' + (k[1].length > 9 ? ' long' : '') + '">' + k[1] + '</div><div class="sub">' + k[2] + '</div></div>';
     }).join('');
 
     // weekly series (full weeks only)
