@@ -126,6 +126,14 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
   .job { grid-template-columns: 1fr; gap: 2px; }
 }
 
+.feature { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; margin-bottom: 16px; color: inherit; text-decoration: none; }
+.feature:hover { text-decoration: none; border-color: var(--accent); }
+.feature h3 { font-size: 21px; }
+.feature p { margin: 6px 0 12px; }
+.feature-link { font-weight: 600; color: var(--accent); font-size: 15px; }
+.feature-stat { text-align: right; }
+.feature-stat .metric { font-size: 44px; margin: 0; }
+@media (max-width: 640px) { .feature { grid-template-columns: 1fr; } .feature-stat { text-align: left; } }
 /* ---------- interactivity ---------- */
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 20; }
 .nav-right { display: flex; align-items: center; gap: 18px; }
@@ -226,6 +234,15 @@ body.filtering .card.match { border-color: var(--accent); }
 <section id="work">
   <div class="wrap">
     <h2>Selected work</h2>
+    <a class="card feature" href="projects/service-ops/" data-skills="Data analysis|Performance analysis">
+      <div class="feature-text">
+        <div class="where" style="margin:0 0 8px">Live project · BI case study</div>
+        <h3>Service Operations MI dashboard</h3>
+        <p>1.96 million real NYC 311 service requests, modelled in SQL as a star schema and turned into an interactive dashboard: SLA performance, channel mix, demand heatmap and data-quality checks. The headline finding: the city-wide 48-hour SLA reads 69.6%, but drops to 38.8% once the fastest agency is taken out.</p>
+        <span class="feature-link">Open the dashboard →</span>
+      </div>
+      <div class="feature-stat"><div class="metric">1.96M</div><div class="where" style="margin:0">requests analysed</div></div>
+    </a>
     <div class="grid">
       <div class="card" data-skills="SQL Server|Query optimisation|.NET">
         <div class="metric">30%</div>
