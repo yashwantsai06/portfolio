@@ -199,6 +199,7 @@ body.filtering .card.match { border-color: var(--accent); }
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
       <a href="#talks">Talks</a>
+      <a href="projects/">Projects</a>
       <a href="#contact">Contact</a>
     </div>
     <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle theme">◐</button>
@@ -530,7 +531,7 @@ body.filtering .card.match { border-color: var(--accent); }
 
   // Progress bar, active nav link, back-to-top
   var bar = document.getElementById('progress'), topBtn = document.getElementById('top-btn');
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.links a'));
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.links a[href^="#"]'));
   function onScroll() {
     var h = document.documentElement.scrollHeight - innerHeight;
     bar.style.width = (h > 0 ? (scrollY / h) * 100 : 0) + '%';

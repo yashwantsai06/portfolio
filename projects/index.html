@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects · Sai Yashwant Tavva</title>
+<meta name="description" content="BI and analytics projects by Sai Yashwant Tavva: dashboards, SQL data models and case studies.">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfbf9; --surface: #ffffff; --text: #16181d; --muted: #5b616e;
+  --line: #e6e6e1; --accent: #1f4fd1; --chip: #f2f2ee;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1115; --surface: #171a20; --text: #eceef2; --muted: #9aa1ad;
+    --line: #262a33; --accent: #7ea2ff; --chip: #1e222a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1115; --surface: #171a20; --text: #eceef2; --muted: #9aa1ad;
+  --line: #262a33; --accent: #7ea2ff; --chip: #1e222a;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+nav { border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.brand { font-weight: 700; color: var(--text); }
+.links { display: flex; gap: 22px; font-size: 14px; align-items: center; }
+.links a { color: var(--muted); }
+.links a:hover, .links a.active { color: var(--accent); }
+.icon-btn { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; font-size: 16px; }
+header { padding: 64px 0 28px; }
+.eyebrow { font: 500 13px/1 "JetBrains Mono", monospace; color: var(--accent); }
+h1 { font-size: clamp(32px, 5vw, 46px); letter-spacing: -0.03em; line-height: 1.1; margin: 14px 0 12px; }
+.lead { color: var(--muted); font-size: 18px; max-width: 620px; margin: 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 28px; }
+.filters button { font: inherit; font-size: 13px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--chip); color: var(--text); cursor: pointer; }
+.filters button.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+.list { display: grid; gap: 16px; padding-bottom: 72px; }
+.project {
+  display: grid; grid-template-columns: 1fr auto; gap: 20px 28px; align-items: start;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px;
+  color: inherit; transition: border-color .2s, transform .2s;
+}
+.project:hover { border-color: var(--accent); transform: translateY(-2px); }
+.project .meta { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.project h2 { font-size: 21px; letter-spacing: -0.015em; margin: 0 0 8px; }
+.project p { color: var(--muted); margin: 0 0 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--chip); border: 1px solid var(--line); color: var(--muted); }
+.stat { text-align: right; }
+.stat b { display: block; font-size: 36px; letter-spacing: -0.03em; color: var(--accent); line-height: 1; }
+.stat span { font-size: 13px; color: var(--muted); }
+.open { display: inline-block; margin-top: 14px; font-weight: 600; font-size: 15px; color: var(--accent); }
+.empty { color: var(--muted); display: none; }
+footer { padding: 28px 0 44px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+@media (max-width: 640px) {
+  .project { grid-template-columns: 1fr; }
+  .stat { text-align: left; }
+  .links a:not(.keep) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../">Sai Yashwant Tavva</a>
+    <div class="links">
+      <a href="../#work">Work</a>
+      <a href="../#experience">Experience</a>
+      <a class="keep active" href="./">Projects</a>
+      <a href="../#contact">Contact</a>
+      <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap">
+  <div class="eyebrow">Projects</div>
+  <h1>Things I've built with data</h1>
+  <p class="lead">BI dashboards, SQL data models and case studies built on real public data. Each one has a live version you can click through.</p>
+</header>
+
+<main class="wrap">
+  <div class="filters" id="filters" role="group" aria-label="Filter projects by tool"></div>
+
+  <div class="list" id="list">
+
+    <!--
+      To add a project: copy one <a class="project"> block below, paste it above
+      the others (newest first), and change the link, text, tools and stat.
+      data-tools is a | separated list; it drives the filter buttons automatically.
+    -->
+
+    <a class="project" href="service-ops/" data-tools="SQL|Python|JavaScript|Data modelling">
+      <div>
+        <div class="meta">Oct 2026 · Case study + live dashboard</div>
+        <h2>Service Operations MI dashboard</h2>
+        <p>1.96 million real NYC 311 service requests, modelled in SQL as a star schema, with an interactive dashboard for SLA performance, channel mix, demand patterns and data quality. Finding: the 48-hour SLA reads 69.6% city-wide but 38.8% once the fastest agency is taken out.</p>
+        <div class="chips"><span class="chip">SQL</span><span class="chip">Python</span><span class="chip">JavaScript</span><span class="chip">Data modelling</span></div>
+        <span class="open">Open project →</span>
+      </div>
+      <div class="stat"><b>1.96M</b><span>requests analysed</span></div>
+    </a>
+
+  </div>
+  <p class="empty" id="empty">No projects use that tool yet.</p>
+</main>
+
+<footer><div class="wrap">© 2026 Sai Yashwant Tavva · <a href="../">Back to portfolio</a></div></footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  document.getElementById('theme-btn').addEventListener('click', function () {
+    var cur = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Build the tool filter from the projects on the page
+  var cards = [].slice.call(document.querySelectorAll('.project'));
+  var tools = [];
+  cards.forEach(function (c) {
+    c.getAttribute('data-tools').split('|').forEach(function (t) { if (tools.indexOf(t) < 0) tools.push(t); });
+  });
+  var box = document.getElementById('filters'), empty = document.getElementById('empty');
+  ['All'].concat(tools).forEach(function (t) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = t; b.setAttribute('aria-pressed', t === 'All');
+    if (t === 'All') b.className = 'on';
+    b.addEventListener('click', function () {
+      [].forEach.call(box.children, function (x) { x.className = ''; x.setAttribute('aria-pressed', 'false'); });
+      b.className = 'on'; b.setAttribute('aria-pressed', 'true');
+      var shown = 0;
+      cards.forEach(function (c) {
+        var ok = t === 'All' || c.getAttribute('data-tools').split('|').indexOf(t) > -1;
+        c.style.display = ok ? '' : 'none'; if (ok) shown++;
+      });
+      empty.style.display = shown ? 'none' : 'block';
+    });
+    box.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>
