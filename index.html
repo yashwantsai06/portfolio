@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <style>
 :root {
   --bg: #fbfbf9;
@@ -24,7 +25,7 @@
   --chip: #f2f2ee;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #0f1115;
     --surface: #171a20;
     --text: #eceef2;
@@ -35,6 +36,17 @@
     --chip: #1e222a;
   }
 }
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --surface: #171a20;
+  --text: #eceef2;
+  --muted: #9aa1ad;
+  --line: #262a33;
+  --accent: #7ea2ff;
+  --accent-soft: #1b2440;
+  --chip: #1e222a;
+}
+body { transition: background-color .3s, color .3s; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -72,7 +84,8 @@ h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.08; letter-spacing: -0.03
 }
 .btn:hover { text-decoration: none; border-color: var(--accent); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-@media (prefers-color-scheme: dark) { .btn.primary { color: #0f1115; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #0f1115; } }
+:root[data-theme="dark"] .btn.primary { color: #0f1115; }
 .facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 40px; font-size: 14px; color: var(--muted); }
 .facts b { color: var(--text); font-weight: 600; }
 
@@ -116,13 +129,67 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
   header { padding: 56px 0 44px; }
   .job { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* ---------- interactivity ---------- */
+#progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 20; }
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.links a.active { color: var(--accent); }
+.icon-btn {
+  width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--text); cursor: pointer;
+  display: inline-grid; place-items: center; font-size: 16px; line-height: 1;
+}
+.icon-btn:hover { border-color: var(--accent); }
+.role { display: inline-block; min-width: 1ch; }
+.role::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px; background: var(--accent); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+.card { position: relative; overflow: hidden; transition: border-color .2s, transform .2s, box-shadow .2s; }
+.card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .25s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+}
+.card:hover::before { opacity: 1; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px -18px color-mix(in srgb, var(--accent) 60%, transparent); }
+
+.chip { cursor: pointer; user-select: none; transition: background .15s, color .15s, border-color .15s; }
+.chip:hover { border-color: var(--accent); }
+.chip.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.skill-hint { font-size: 14px; color: var(--muted); margin: -12px 0 22px; }
+.filter-bar {
+  position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 140%); z-index: 15;
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px 10px 16px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  box-shadow: 0 12px 40px -16px rgba(0,0,0,.35); font-size: 14px; transition: transform .3s ease; max-width: calc(100% - 32px);
+}
+.filter-bar.show { transform: translate(-50%, 0); }
+.filter-bar b { color: var(--accent); }
+.filter-bar button { border: 0; background: var(--chip); color: var(--text); border-radius: 999px; padding: 5px 12px; cursor: pointer; font: inherit; }
+.job, .card { transition: opacity .25s, border-color .2s, transform .2s, box-shadow .2s; }
+body.filtering [data-skills].dim { opacity: .25; }
+body.filtering .job.match { border-left: 3px solid var(--accent); padding-left: 14px; }
+body.filtering .card.match { border-color: var(--accent); }
+#top-btn { position: fixed; right: 20px; bottom: 20px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 14; }
+#top-btn.show { opacity: 1; pointer-events: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .role::after { animation: none; }
+  .card:hover { transform: none; }
+}
 </style>
 </head>
 <body>
 
+<div id="progress"></div>
 <nav>
   <div class="wrap">
     <a class="brand" href="#">Sai Yashwant Tavva</a>
+    <div class="nav-right">
     <div class="links">
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
@@ -131,12 +198,14 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
       <a href="#linkedin">Posts</a>
       <a href="#contact">Contact</a>
     </div>
+    <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode" title="Toggle theme">◐</button>
+    </div>
   </div>
 </nav>
 
 <header>
   <div class="wrap">
-    <div class="eyebrow">BI Developer · London</div>
+    <div class="eyebrow"><span class="role" id="role">BI Developer</span> · London</div>
     <h1>I build the dashboards<br>and the apps behind them.</h1>
     <p class="lead">Two years as a full-stack developer on Angular and .NET, now doing an MSc in Business Analytics. I can model the data, report on it in Power BI, and build the software it comes from.</p>
     <div class="cta">
@@ -163,25 +232,25 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
   <div class="wrap">
     <h2>Selected work</h2>
     <div class="grid">
-      <div class="card">
+      <div class="card" data-skills="SQL Server|Query optimisation|.NET">
         <div class="metric">30%</div>
         <h3>Faster SQL queries</h3>
         <p>Rewrote slow SQL Server queries behind a production web app and cut response latency by 30%.</p>
         <div class="where">Full-stack developer · SQL Server, .NET</div>
       </div>
-      <div class="card">
+      <div class="card" data-skills="Angular|TypeScript|HTML5 / CSS3">
         <div class="metric">20%</div>
         <h3>Quicker user flows</h3>
         <p>Built and deployed a responsive Angular app that cut the time users spent completing tasks by 20%.</p>
         <div class="where">Full-stack developer · Angular, TypeScript</div>
       </div>
-      <div class="card">
+      <div class="card" data-skills="Data analysis">
         <div class="metric">Excellent</div>
         <h3>Rolls-Royce supply chain plan</h3>
         <p>Wrote a sustainable supply chain integration plan for a Rolls-Royce brief. The assessor called it "an outstanding outline".</p>
         <div class="where">Springpod micro-internship · 2026</div>
       </div>
-      <div class="card">
+      <div class="card" data-skills="Angular|UI/UX|Figma">
         <div class="metric">50+</div>
         <h3>Students taught</h3>
         <p>Ran five hands-on Angular and UI/UX workshops and talks for IEEE events, Symbiosis campuses and my own college.</p>
@@ -195,7 +264,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
   <div class="wrap">
     <h2>Experience</h2>
 
-    <div class="job">
+    <div class="job" data-skills="Power BI|Performance analysis|Data analysis">
       <div class="when">Mar 2026 – now</div>
       <div>
         <h3>Customer Service Manager</h3>
@@ -206,7 +275,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
       </div>
     </div>
 
-    <div class="job">
+    <div class="job" data-skills="Data analysis">
       <div class="when">Jul – Aug 2026</div>
       <div>
         <h3>Micro-Internship, Rolls-Royce project</h3>
@@ -217,7 +286,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
       </div>
     </div>
 
-    <div class="job">
+    <div class="job" data-skills="Angular|TypeScript|HTML5 / CSS3|REST APIs|.NET">
       <div class="when">Sep 2024 – Jul 2025</div>
       <div>
         <h3>Angular Developer</h3>
@@ -229,7 +298,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
       </div>
     </div>
 
-    <div class="job">
+    <div class="job" data-skills="Angular|TypeScript|C#|.NET|ASP.NET|REST APIs|SQL Server|Query optimisation|Unit testing|UI/UX">
       <div class="when">Oct 2023 – Sep 2024</div>
       <div>
         <h3>Associate Consultant <span style="font-weight:400;color:var(--muted)">(from Trainee Consultant)</span></h3>
@@ -241,7 +310,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
       </div>
     </div>
 
-    <div class="job">
+    <div class="job" data-skills="Illustrator|Adobe XD|Figma|UI/UX">
       <div class="when">May – Oct 2023</div>
       <div>
         <h3>Graphic Designer</h3>
@@ -252,7 +321,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
       </div>
     </div>
 
-    <div class="job">
+    <div class="job" data-skills="Illustrator">
       <div class="when">2019 – 2020</div>
       <div>
         <h3>Earlier roles</h3>
@@ -265,6 +334,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
 <section id="skills">
   <div class="wrap">
     <h2>Skills</h2>
+    <p class="skill-hint">Tap a skill to see where I've used it.</p>
     <div class="skills">
       <div>
         <h3>Data &amp; BI</h3>
@@ -291,7 +361,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
 <section id="talks">
   <div class="wrap">
     <h2>Talks &amp; workshops</h2>
-    <div class="job">
+    <div class="job" data-skills="UI/UX|Figma">
       <div class="when">Aug 2025</div>
       <div>
         <h3>UI/UX Design, 2-day workshop</h3>
@@ -299,28 +369,28 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
         <ul><li>Design thinking, usability principles, wireframing and prototyping for first-year engineers</li></ul>
       </div>
     </div>
-    <div class="job">
+    <div class="job" data-skills="Angular|TypeScript">
       <div class="when">Jul 2025</div>
       <div>
         <h3>Hands-on Angular workshop</h3>
         <p class="org">CODEXELERATE 2025 · IEEE Sreyas Student Branch, Hyderabad</p>
       </div>
     </div>
-    <div class="job">
+    <div class="job" data-skills="UI/UX|Figma">
       <div class="when">2025</div>
       <div>
         <h3>UI/UX for Beginners · Alumni Chief Guest Speaker</h3>
         <p class="org">SYPRO 6.0, national-level flagship event of IEEE VEC Student Branch · Vaagdevi Engineering College, where I did my BTech</p>
       </div>
     </div>
-    <div class="job">
+    <div class="job" data-skills="Angular|TypeScript">
       <div class="when">Oct 2024</div>
       <div>
         <h3>Angular 101: Learn It, Build It, Own It</h3>
         <p class="org">IEEE Education Leadership Summit 2024 · Vardhaman College of Engineering, Hyderabad</p>
       </div>
     </div>
-    <div class="job">
+    <div class="job" data-skills="Angular|TypeScript|HTML5 / CSS3">
       <div class="when">May 2024</div>
       <div>
         <h3>Frontend Development with Angular</h3>
@@ -377,7 +447,7 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
 <section id="education">
   <div class="wrap">
     <h2>Education &amp; community</h2>
-    <div class="job">
+    <div class="job" data-skills="Power BI|Data analysis|Performance analysis">
       <div class="when">2025 – 2028</div>
       <div>
         <h3>MSc Business Analytics</h3>
@@ -416,5 +486,146 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
   <div class="wrap">© 2026 Sai Yashwant Tavva · London</div>
 </footer>
 
+
+<div class="filter-bar" id="filter-bar" role="status" aria-live="polite">
+  <span id="filter-text"></span>
+  <button id="filter-clear" type="button">Clear</button>
+</div>
+<button class="icon-btn" id="top-btn" aria-label="Back to top">↑</button>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Theme toggle (remembered per browser)
+  var saved = null;
+  try { saved = localStorage.getItem('theme'); } catch (e) {}
+  if (saved) root.setAttribute('data-theme', saved);
+  document.getElementById('theme-btn').addEventListener('click', function () {
+    var dark = root.getAttribute('data-theme') ?
+      root.getAttribute('data-theme') === 'dark' :
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next = dark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // Rotating role, typed out
+  var roles = ['BI Developer', 'Power BI Developer', 'MI Analyst', 'Full-Stack Developer'];
+  var roleEl = document.getElementById('role');
+  if (!reduce) {
+    var r = 0, c = roles[0].length, deleting = true;
+    setTimeout(function tick() {
+      var word = roles[r];
+      if (deleting) {
+        c--;
+        if (c === 0) { deleting = false; r = (r + 1) % roles.length; }
+      } else {
+        c++;
+        if (c === roles[r].length) { deleting = true; roleEl.textContent = roles[r]; return setTimeout(tick, 2200); }
+      }
+      roleEl.textContent = roles[r].slice(0, c);
+      setTimeout(tick, deleting ? 45 : 85);
+    }, 2200);
+  }
+
+  // Reveal on scroll + count-up numbers
+  var revealEls = document.querySelectorAll('section h2, .about p, .card, .job, .skills > div, .contact p');
+  function countUp(el) {
+    var m = el.firstChild && el.firstChild.nodeValue && el.firstChild.nodeValue.match(/^([\d,]+)(.*)$/);
+    if (!m || reduce) return;
+    var target = parseInt(m[1].replace(/,/g, ''), 10), suffix = m[2], start = null;
+    function step(t) {
+      if (!start) start = t;
+      var k = Math.min((t - start) / 1100, 1), v = Math.round(target * (1 - Math.pow(1 - k, 3)));
+      el.firstChild.nodeValue = v.toLocaleString('en-GB') + suffix;
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window) {
+    revealEls.forEach(function (el) { el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        var metric = e.target.querySelector && e.target.querySelector('.metric');
+        if (metric) countUp(metric);
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  }
+
+  // Card spotlight follows the cursor
+  document.querySelectorAll('.card').forEach(function (card) {
+    card.addEventListener('pointermove', function (e) {
+      var b = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - b.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - b.top) + 'px');
+    });
+  });
+
+  // Progress bar, active nav link, back-to-top
+  var bar = document.getElementById('progress'), topBtn = document.getElementById('top-btn');
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.links a'));
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (h > 0 ? (scrollY / h) * 100 : 0) + '%';
+    topBtn.classList.toggle('show', scrollY > 700);
+    var current = null;
+    navLinks.forEach(function (a) {
+      var sec = document.querySelector(a.getAttribute('href'));
+      if (sec && sec.getBoundingClientRect().top < innerHeight * 0.35) current = a;
+    });
+    navLinks.forEach(function (a) { a.classList.toggle('active', a === current); });
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  topBtn.addEventListener('click', function () { scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+
+  // Skill filter: tap a skill, see where it was used
+  var chips = document.querySelectorAll('.chip');
+  var items = document.querySelectorAll('[data-skills]');
+  var fbar = document.getElementById('filter-bar'), ftext = document.getElementById('filter-text');
+  function clearFilter() {
+    document.body.classList.remove('filtering');
+    chips.forEach(function (c) { c.classList.remove('on'); c.setAttribute('aria-pressed', 'false'); });
+    items.forEach(function (i) { i.classList.remove('match', 'dim'); });
+    fbar.classList.remove('show');
+  }
+  chips.forEach(function (chip) {
+    chip.setAttribute('role', 'button');
+    chip.setAttribute('tabindex', '0');
+    chip.setAttribute('aria-pressed', 'false');
+    function pick() {
+      var skill = chip.textContent.trim();
+      if (chip.classList.contains('on')) return clearFilter();
+      clearFilter();
+      chip.classList.add('on');
+      chip.setAttribute('aria-pressed', 'true');
+      document.body.classList.add('filtering');
+      var n = 0, first = null;
+      items.forEach(function (i) {
+        var hit = i.getAttribute('data-skills').split('|').indexOf(skill) > -1;
+        i.classList.toggle('match', hit);
+        i.classList.toggle('dim', !hit);
+        if (hit) { n++; if (!first && i.closest('#experience, #talks')) first = i; }
+      });
+      ftext.innerHTML = '<b>' + skill + '</b> · used in ' + n + (n === 1 ? ' place' : ' places');
+      fbar.classList.add('show');
+      if (first) first.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    }
+    chip.addEventListener('click', pick);
+    chip.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+  });
+  document.getElementById('filter-clear').addEventListener('click', function () {
+    clearFilter();
+    document.getElementById('skills').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') clearFilter(); });
+})();
+</script>
 </body>
 </html>
