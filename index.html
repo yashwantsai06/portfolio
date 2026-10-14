@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sai Yashwant Tavva · BI Developer</title>
+<meta name="description" content="Sai Yashwant Tavva, BI Developer in London. Power BI, SQL Server, C#, .NET and Angular. I build the dashboards and the apps behind them.">
+<meta property="og:title" content="Sai Yashwant Tavva · BI Developer">
+<meta property="og:description" content="I build the dashboards and the apps behind them. Power BI, SQL Server, .NET, Angular. London.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231f4fd1'/><text x='50%' y='54%' text-anchor='middle' dominant-baseline='middle' font-family='Arial' font-weight='700' font-size='28' fill='white'>SY</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fbfbf9;
+  --surface: #ffffff;
+  --text: #16181d;
+  --muted: #5b616e;
+  --line: #e6e6e1;
+  --accent: #1f4fd1;
+  --accent-soft: #e9efff;
+  --chip: #f2f2ee;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115;
+    --surface: #171a20;
+    --text: #eceef2;
+    --muted: #9aa1ad;
+    --line: #262a33;
+    --accent: #7ea2ff;
+    --accent-soft: #1b2440;
+    --chip: #1e222a;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.65 Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+
+nav {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.brand { font-weight: 700; color: var(--text); }
+.links { display: flex; gap: 22px; font-size: 14px; }
+.links a { color: var(--muted); }
+.links a:hover { color: var(--text); text-decoration: none; }
+
+header { padding: 88px 0 64px; }
+.eyebrow { font: 500 13px/1 "JetBrains Mono", monospace; color: var(--accent); letter-spacing: .02em; }
+h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.08; letter-spacing: -0.03em; margin: 16px 0 18px; }
+.lead { font-size: 19px; color: var(--muted); max-width: 640px; margin: 0; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 18px; border-radius: 10px; font-weight: 600; font-size: 15px;
+  border: 1px solid var(--line); color: var(--text); background: var(--surface);
+}
+.btn:hover { text-decoration: none; border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+@media (prefers-color-scheme: dark) { .btn.primary { color: #0f1115; } }
+.facts { display: flex; flex-wrap: wrap; gap: 10px 28px; margin-top: 40px; font-size: 14px; color: var(--muted); }
+.facts b { color: var(--text); font-weight: 600; }
+
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+h2 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 28px; }
+h3 { font-size: 18px; margin: 0 0 6px; letter-spacing: -0.01em; }
+p { margin: 0 0 14px; }
+
+.about p { font-size: 17px; max-width: 680px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+}
+.metric { font-size: 34px; font-weight: 700; letter-spacing: -0.03em; color: var(--accent); line-height: 1; margin-bottom: 12px; }
+.card p { color: var(--muted); font-size: 15px; margin: 0; }
+.card .where { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+.job { display: grid; grid-template-columns: 170px 1fr; gap: 8px 28px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.job:last-child { border-bottom: 0; }
+.when { font: 500 13px/1.6 "JetBrains Mono", monospace; color: var(--muted); padding-top: 3px; }
+.job .org { color: var(--muted); font-size: 15px; margin: 0 0 8px; }
+.job ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; }
+.job li { margin: 4px 0; }
+
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.skills h3 { font-size: 15px; margin-bottom: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--chip); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 13px; }
+
+.contact { text-align: left; }
+.contact p { font-size: 17px; color: var(--muted); max-width: 600px; }
+footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+
+@media (max-width: 640px) {
+  .links { display: none; }
+  header { padding: 56px 0 44px; }
+  .job { grid-template-columns: 1fr; gap: 2px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#">Sai Yashwant Tavva</a>
+    <div class="links">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">BI Developer · London</div>
+    <h1>I build the dashboards<br>and the apps behind them.</h1>
+    <p class="lead">Two years as a full-stack developer on Angular and .NET, now doing an MSc in Business Analytics. I can model the data, report on it in Power BI, and build the software it comes from.</p>
+    <div class="cta">
+      <a class="btn primary" href="mailto:syashwant1409@gmail.com">Email me</a>
+      <a class="btn" href="https://www.linkedin.com/in/saiyashwant/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/yashwantsai06" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="facts">
+      <span><b>Open to</b> BI Developer, MI and Full-Stack roles</span>
+      <span><b>Based in</b> London · on-site, hybrid or remote</span>
+    </div>
+  </div>
+</header>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <h2>About</h2>
+    <p>I started out building front ends in Angular and TypeScript, then moved further back into .NET APIs and SQL Server. Most of the speed problems I fixed came down to the database, which is how I got interested in the data side.</p>
+    <p>I'm now studying Business Analytics at The University of Law (3.9/4.0 so far) and working part-time as a Customer Service Manager at Entain. That job keeps me close to real customers, which helps me when I'm deciding what a report should actually show.</p>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <h2>Selected work</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="metric">30%</div>
+        <h3>Faster SQL queries</h3>
+        <p>Rewrote slow SQL Server queries behind a production web app and cut response latency by 30%.</p>
+        <div class="where">Full-stack developer · SQL Server, .NET</div>
+      </div>
+      <div class="card">
+        <div class="metric">20%</div>
+        <h3>Quicker user flows</h3>
+        <p>Built and deployed a responsive Angular app that cut the time users spent completing tasks by 20%.</p>
+        <div class="where">Full-stack developer · Angular, TypeScript</div>
+      </div>
+      <div class="card">
+        <div class="metric">Excellent</div>
+        <h3>Rolls-Royce supply chain plan</h3>
+        <p>Wrote a sustainable supply chain integration plan for a Rolls-Royce brief. The assessor called it "an outstanding outline".</p>
+        <div class="where">Springpod micro-internship · 2026</div>
+      </div>
+      <div class="card">
+        <div class="metric">50+</div>
+        <h3>Students taught</h3>
+        <p>Ran hands-on Angular and UI/UX workshops at IEEE CODEXELERATE 2025 and Symbiosis Institute of Technology, Hyderabad.</p>
+        <div class="where">Guest speaker · 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <h2>Experience</h2>
+
+    <div class="job">
+      <div class="when">Mar 2026 – now</div>
+      <div>
+        <h3>Customer Service Manager</h3>
+        <p class="org">Entain · Part-time · London</p>
+        <ul>
+          <li>Customer experience management and service operations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="when">Jul – Aug 2026</div>
+      <div>
+        <h3>Micro-Internship, Rolls-Royce project</h3>
+        <p class="org">Springpod · Remote</p>
+        <ul>
+          <li>Built a sustainable supply chain integration plan and implementation recommendations; graded Excellent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="when">Sep 2024 – Jul 2025</div>
+      <div>
+        <h3>Angular Developer</h3>
+        <p class="org">Drucare · Full-time · Remote</p>
+        <ul>
+          <li>Front-end development in Angular, TypeScript, HTML5 and CSS3</li>
+          <li>Integrated the front end with .NET REST APIs</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="when">Oct 2023 – Sep 2024</div>
+      <div>
+        <h3>Associate Consultant <span style="font-weight:400;color:var(--muted)">(from Trainee Consultant)</span></h3>
+        <p class="org">ProvenTech Consulting · Full-time · Hyderabad</p>
+        <ul>
+          <li>Full-stack delivery for client projects across Angular, .NET and SQL Server</li>
+          <li>Front-end development with unit testing and UX input</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="when">May – Oct 2023</div>
+      <div>
+        <h3>Graphic Designer</h3>
+        <p class="org">Telangana Innovation Cell · Hyderabad</p>
+        <ul>
+          <li>Designed graphics for digital campaigns that lifted engagement by 40%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2>Skills</h2>
+    <div class="skills">
+      <div>
+        <h3>Data &amp; BI</h3>
+        <div class="chips">
+          <span class="chip">Power BI</span><span class="chip">SQL Server</span><span class="chip">Data analysis</span><span class="chip">Performance analysis</span><span class="chip">Query optimisation</span>
+        </div>
+      </div>
+      <div>
+        <h3>Development</h3>
+        <div class="chips">
+          <span class="chip">C#</span><span class="chip">.NET</span><span class="chip">ASP.NET</span><span class="chip">REST APIs</span><span class="chip">Angular</span><span class="chip">TypeScript</span><span class="chip">HTML5 / CSS3</span><span class="chip">Unit testing</span>
+        </div>
+      </div>
+      <div>
+        <h3>Design</h3>
+        <div class="chips">
+          <span class="chip">Figma</span><span class="chip">Adobe XD</span><span class="chip">Illustrator</span><span class="chip">UI/UX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <h2>Education &amp; community</h2>
+    <div class="job">
+      <div class="when">2025 – 2028</div>
+      <div>
+        <h3>MSc Business Analytics</h3>
+        <p class="org">The University of Law, London · 3.9/4.0</p>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when">2018 – 2022</div>
+      <div>
+        <h3>BTech, Electrical and Communications Engineering</h3>
+        <p class="org">Vaagdevi Engineering College</p>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when">2020 – 2024</div>
+      <div>
+        <h3>IEEE &amp; IETE</h3>
+        <p class="org">Vice Chair, Marketing and Media Communication (IEEE EdSoc YP) · President, IETE Vaagdevi Student Branch</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p>Hiring a BI developer who can also build the app behind the data? I'd like to hear about it.</p>
+    <div class="cta">
+      <a class="btn primary" href="mailto:syashwant1409@gmail.com">syashwant1409@gmail.com</a>
+      <a class="btn" href="https://www.linkedin.com/in/saiyashwant/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 Sai Yashwant Tavva · London</div>
+</footer>
+
+</body>
+</html>
