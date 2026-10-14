@@ -68,7 +68,10 @@ h1 { font-size: clamp(28px, 4.5vw, 42px); line-height: 1.12; letter-spacing: -0.
 .filters button { font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
 .filters .note { font-size: 12px; color: var(--faint); margin-left: auto; }
 
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 24px 0; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
+@media (min-width: 1000px) { .kpis { grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+.kpi .value { overflow-wrap: anywhere; }
 .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
 .kpi .label { font-size: 12px; color: var(--muted); font-weight: 500; }
 .kpi .value { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-top: 6px; }
@@ -209,7 +212,7 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
       </div>
       <div class="finding">
         <h3>2. Housing is the biggest backlog risk</h3>
-        <p>Housing (HPD) receives <strong>325,995</strong> requests, 17% of the total, and resolves just <strong>17.6%</strong> within 48 hours. <strong>52.8%</strong> take longer than 7 days, and the median is <strong>181 hours</strong> (about 7.5 days). The volume is driven by unsanitary conditions, heat and hot water, and plumbing: problems residents feel every day they stay open.</p>
+        <p>Housing (HPD) receives <strong>325,995</strong> requests, 17% of the total, and resolves just <strong>17.6%</strong> within 48 hours. <strong>52.8%</strong> take longer than 7 days, and the median is <strong>181 hours</strong> (about 7.5 days). The slow work is concentrated: <strong>64.5%</strong> of unsanitary-condition complaints and <strong>54.2%</strong> of plumbing complaints take over 7 days. Heat and hot water, by contrast, almost always close within a week (0.4% over 7 days), which shows the team can move fast on a complaint type it prioritises.</p>
       </div>
       <div class="finding">
         <h3>3. "Faster channels" is mostly a mix effect</h3>
@@ -220,7 +223,11 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
         <p>Parks (DPR) still has <strong>39.3%</strong> of its requests open at the end of the period. Even a quarter of the Parks requests from April (<strong>2,195 of 8,638</strong>) were still open at the end of September. Those are not in any resolution-time figure, because they have not closed yet, so open-request ageing needs its own report.</p>
       </div>
       <div class="finding">
-        <h3>5. Night demand is a police-noise pattern</h3>
+        <h3>5. One week broke the pattern</h3>
+        <p>Weekly volume is steady at roughly 69,000 to 81,000 requests, except the week of 29 June, which reached <strong>87,511</strong>. Drilling in, the extra demand was mostly <strong>Water System</strong> complaints, about 8,000 more than the weeks either side, plus street noise around 4 July. A one-off like this is worth a short note to the water team before it shows up as a missed SLA.</p>
+      </div>
+      <div class="finding">
+        <h3>6. Night demand is a police-noise pattern</h3>
         <p>Overall demand peaks between 09:00 and 13:00. But <strong>28.5%</strong> of NYPD requests arrive between 22:00 and 04:00, compared with <strong>8.9%</strong> for every other agency. Out-of-hours staffing should be planned around one agency's complaint types, not the city-wide curve.</p>
       </div>
     </div>
@@ -240,7 +247,7 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
     <div id="cs-recs">
       <ol>
         <li><strong>Report the SLA per agency, never only the blended figure.</strong> Show the city-wide number next to the figure without NYPD so the headline cannot hide underperformance.</li>
-        <li><strong>Give housing complaints SLAs by type.</strong> Heat, hot water and plumbing need a faster target and a daily breach list; a single 48-hour target for HPD is missed four times out of five.</li>
+        <li><strong>Give housing complaints SLAs by type.</strong> A single 48-hour target for HPD is missed four times out of five. Set realistic targets per complaint type, and run a weekly breach list for unsanitary conditions and plumbing, the two types that most often run past 7 days.</li>
         <li><strong>Add an ageing report for open requests.</strong> Review anything open longer than 90 days with Parks first, and either close it with a reason or escalate it.</li>
         <li><strong>Fix channel capture before investing in channel shift.</strong> Buildings and Transportation need channel recorded on every request, then compare channels within each agency, not across the city.</li>
         <li><strong>Ask Environmental Protection about instant closures.</strong> If they are duplicates, merge them at intake; if they are auto-closures, report them as a separate outcome.</li>
@@ -276,8 +283,10 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
   var fmt = new Intl.NumberFormat('en-GB');
   var pct = function (x) { return isFinite(x) ? (x * 100).toFixed(1) + '%' : '–'; };
   var BAND_LABELS = ['Under 4 hours', '4–24 hours', '1–2 days', '2–7 days', '7–30 days', 'Over 30 days'];
-  var BAND_EDGES = [0, 4, 24, 48, 168, 720, 2160];
   var DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var NAMES = { NYPD: 'Police (NYPD)', HPD: 'Housing (HPD)', DSNY: 'Sanitation (DSNY)', DOT: 'Transportation (DOT)',
+    DEP: 'Environmental Protection (DEP)', DPR: 'Parks (DPR)', DOB: 'Buildings (DOB)', DOHMH: 'Health (DOHMH)' };
+  function nm(k) { return NAMES[k] || k; }
   var tip = document.getElementById('tip');
   var D, F = { agency: 'All', channel: 'All', borough: 'All' };
 
@@ -307,15 +316,11 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
   }
   function bands(rs) { var b = [0, 0, 0, 0, 0, 0]; rs.forEach(function (r) { for (var i = 0; i < 6; i++) b[i] += r['b' + i]; }); return b; }
   function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
-  function approxMedian(b) {
-    var tot = sum(b), half = tot / 2, acc = 0;
-    for (var i = 0; i < 6; i++) {
-      if (acc + b[i] >= half && b[i] > 0) return BAND_EDGES[i] + (half - acc) / b[i] * (BAND_EDGES[i + 1] - BAND_EDGES[i]);
-      acc += b[i];
-    }
-    return NaN;
+  function medianBand(b) {
+    var half = sum(b) / 2, acc = 0;
+    for (var i = 0; i < 6; i++) { acc += b[i]; if (acc >= half && b[i] > 0) return BAND_LABELS[i]; }
+    return '–';
   }
-  function hours(h) { return !isFinite(h) ? '–' : h < 48 ? h.toFixed(1) + ' h' : (h / 24).toFixed(1) + ' days'; }
 
   // ---------- charts ----------
   function lineChart(id, pts, opts) {
@@ -335,7 +340,11 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
     }
     el('line', { class: 'base', x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b }, svg);
     var step = Math.ceil(pts.length / Math.max(2, Math.floor((W - m.l - m.r) / 70)));
-    pts.forEach(function (p, i) { if (i % step === 0) el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax).textContent = p.lab; });
+    pts.forEach(function (p, i) {
+      if (i % step) return;
+      var xi = x(i), anchor = xi > W - m.r - 30 ? 'end' : 'middle';
+      el('text', { x: xi, y: H - 8, 'text-anchor': anchor }, ax).textContent = p.lab;
+    });
     var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p.y).toFixed(1); }).join(' ');
     if (opts.area) el('path', { d: d + ' L' + x(pts.length - 1) + ' ' + y(min) + ' L' + x(0) + ' ' + y(min) + ' Z', fill: css('--accent'), opacity: .10 }, svg);
     el('path', { d: d, fill: 'none', stroke: css('--accent'), 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
@@ -411,7 +420,7 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
       ['Requests', fmt.format(n), 'Apr–Sep 2026'],
       ['Resolved within 48h', pct(in48), 'of ' + fmt.format(measured) + ' measurable closures'],
       ['Resolved within 7 days', pct(in7), 'same base'],
-      ['Median time to close', hours(approxMedian(b)), 'estimated from resolution bands'],
+      ['Typical time to close', medianBand(b), 'band containing the median request'],
       ['Closed instantly', pct(zero / closed), 'closed at creation, excluded from SLA'],
       ['Still open', fmt.format(n - closed), pct((n - closed) / n) + ' of requests at extract']
     ];
@@ -465,7 +474,7 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
 
     var ag = table('t-agency', 'agency_group', W);
     document.getElementById('t-agency').innerHTML = '<table class="rows"><thead><tr><th>Agency</th><th class="num">Requests</th><th class="num">Within 48h</th><th class="num">Over 7 days</th></tr></thead><tbody>' +
-      ag.list.map(function (r) { return '<tr><td>' + r.k + '</td><td class="num">' + fmt.format(r.n) + '</td><td class="num">' + pct(r.in48) + '</td><td class="num">' + pct(r.over7) + '</td></tr>'; }).join('') + '</tbody></table>';
+      ag.list.map(function (r) { return '<tr><td>' + nm(r.k) + '</td><td class="num">' + fmt.format(r.n) + '</td><td class="num">' + pct(r.in48) + '</td><td class="num">' + pct(r.over7) + '</td></tr>'; }).join('') + '</tbody></table>';
 
     var C = D.complaints.filter(function (r) { return pass(r, false); });
     var cp = table('t-complaints', 'complaint_group', C.filter(function (r) { return r.complaint_group !== 'Other'; }), 10);
@@ -482,7 +491,7 @@ footer { margin: 56px 0 40px; padding-top: 20px; border-top: 1px solid var(--lin
 
   function fillSelect(id, key, values) {
     var s = document.getElementById(id);
-    s.innerHTML = '<option>All</option>' + values.map(function (v) { return '<option>' + v + '</option>'; }).join('');
+    s.innerHTML = '<option value="All">All</option>' + values.map(function (v) { return '<option value="' + v + '">' + nm(v) + '</option>'; }).join('');
     s.addEventListener('change', function () { F[key] = s.value; render(); });
   }
 
