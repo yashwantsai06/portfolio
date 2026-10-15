@@ -134,6 +134,22 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
 .feature-stat { text-align: right; }
 .feature-stat .metric { font-size: 44px; margin: 0; }
 @media (max-width: 640px) { .feature { grid-template-columns: 1fr; } .feature-stat { text-align: left; } }
+
+/* ---------- 3D avatar ---------- */
+.hero { display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.hero-text { flex: 1 1 auto; min-width: 0; }
+.avatar { flex: 0 0 340px; height: 440px; position: relative; }
+.avatar::before {
+  content: ""; position: absolute; inset: 12% 8% 4%; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
+  filter: blur(8px); z-index: 0;
+}
+.avatar model-viewer { position: relative; z-index: 1; width: 100%; height: 100%; background: transparent; --poster-color: transparent; --progress-bar-color: var(--accent); outline: none; }
+.avatar-hint { position: absolute; left: 0; right: 0; bottom: -4px; text-align: center; font-size: 12px; color: var(--muted); z-index: 2; transition: opacity .4s; }
+@media (max-width: 860px) {
+  .hero { flex-direction: column-reverse; align-items: stretch; gap: 28px; }
+  .avatar { flex-basis: auto; height: 300px; }
+}
 /* ---------- interactivity ---------- */
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 20; }
 .nav-right { display: flex; align-items: center; gap: 18px; }
@@ -208,7 +224,8 @@ body.filtering .card.match { border-color: var(--accent); }
 </nav>
 
 <header>
-  <div class="wrap">
+  <div class="wrap hero">
+    <div class="hero-text">
     <div class="eyebrow"><span class="role" id="role">BI Developer</span> · London</div>
     <h1>I build the dashboards<br>and the apps behind them.</h1>
     <p class="lead">Two years as a full-stack developer on Angular and .NET, now doing an MSc in Business Analytics. I can model the data, report on it in Power BI, and build the software it comes from.</p>
@@ -221,6 +238,9 @@ body.filtering .card.match { border-color: var(--accent); }
       <span><b>Open to</b> BI Developer, MI and Full-Stack roles</span>
       <span><b>Based in</b> London · on-site, hybrid or remote</span>
     </div>
+    </div>
+    <!-- 3D avatar: appears automatically once assets/avatar.glb exists -->
+    <div class="avatar" id="avatar" hidden></div>
   </div>
 </header>
 
@@ -546,6 +566,59 @@ body.filtering .card.match { border-color: var(--accent); }
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
   topBtn.addEventListener('click', function () { scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+
+
+  // 3D avatar: only loads when assets/avatar.glb exists, so the page never shows an empty box
+  var slot = document.getElementById('avatar');
+  fetch('assets/avatar.glb', { method: 'HEAD' }).then(function (r) {
+    if (!r.ok) return;
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
+    document.head.appendChild(s);
+
+    var mv = document.createElement('model-viewer');
+    mv.setAttribute('src', 'assets/avatar.glb');
+    mv.setAttribute('alt', '3D avatar of Sai Yashwant Tavva');
+    mv.setAttribute('camera-controls', '');
+    mv.setAttribute('disable-zoom', '');
+    mv.setAttribute('disable-pan', '');
+    mv.setAttribute('interaction-prompt', 'none');
+    mv.setAttribute('shadow-intensity', '1');
+    mv.setAttribute('exposure', '1.05');
+    mv.setAttribute('camera-orbit', '0deg 82deg auto');
+    mv.setAttribute('min-camera-orbit', 'auto 60deg auto');
+    mv.setAttribute('max-camera-orbit', 'auto 100deg auto');
+    if (!reduce) { mv.setAttribute('auto-rotate', ''); mv.setAttribute('auto-rotate-delay', '4000'); mv.setAttribute('rotation-per-second', '12deg'); }
+    slot.appendChild(mv);
+    var hint = document.createElement('div');
+    hint.className = 'avatar-hint'; hint.textContent = 'Drag to spin me around';
+    slot.appendChild(hint);
+    slot.hidden = false;
+
+    // Play an idle/wave animation if the model includes one
+    mv.addEventListener('load', function () {
+      var anims = mv.availableAnimations || [];
+      var pick = anims.filter(function (a) { return /idle|breath|wave|stand/i.test(a); })[0] || anims[0];
+      if (pick && !reduce) { mv.animationName = pick; mv.play(); }
+    });
+    mv.addEventListener('camera-change', function (e) {
+      if (e.detail && e.detail.source === 'user-interaction') hint.style.opacity = 0;
+    });
+
+    // Turn gently towards the cursor while it moves over the header
+    if (!reduce && matchMedia('(pointer: fine)').matches) {
+      var hdr = document.querySelector('header'), idle;
+      hdr.addEventListener('pointermove', function (e) {
+        var b = hdr.getBoundingClientRect();
+        var x = (e.clientX - b.left) / b.width - 0.5, y = (e.clientY - b.top) / b.height - 0.5;
+        mv.removeAttribute('auto-rotate');
+        mv.cameraOrbit = (x * -50).toFixed(1) + 'deg ' + (82 + y * 10).toFixed(1) + 'deg auto';
+        clearTimeout(idle);
+        idle = setTimeout(function () { mv.setAttribute('auto-rotate', ''); }, 4000);
+      });
+    }
+  }).catch(function () {});
 
   // Skill filter: tap a skill, see where it was used
   var chips = document.querySelectorAll('.chip');
