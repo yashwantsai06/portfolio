@@ -51,6 +51,7 @@ h1 { font-size: clamp(32px, 5vw, 46px); letter-spacing: -0.03em; line-height: 1.
   color: inherit; transition: border-color .2s, transform .2s;
 }
 .project:hover { border-color: var(--accent); transform: translateY(-2px); }
+.project.static:hover { border-color: var(--line); transform: none; }
 .project .meta { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
 .project h2 { font-size: 21px; letter-spacing: -0.015em; margin: 0 0 8px; }
 .project p { color: var(--muted); margin: 0 0 14px; }
@@ -87,7 +88,7 @@ footer { padding: 28px 0 44px; border-top: 1px solid var(--line); color: var(--m
 <header class="wrap">
   <div class="eyebrow">Projects</div>
   <h1>Things I've built with data</h1>
-  <p class="lead">BI dashboards, SQL data models and case studies built on real public data. Each one has a live version you can click through.</p>
+  <p class="lead">BI dashboards, SQL data models, statistical analysis and case studies. Projects with a live version open when you click them.</p>
 </header>
 
 <main class="wrap">
@@ -111,6 +112,26 @@ footer { padding: 28px 0 44px; border-top: 1px solid var(--line); color: var(--m
       </div>
       <div class="stat"><b>1.96M</b><span>requests analysed</span></div>
     </a>
+
+    <div class="project static" data-tools="Python|Statistics|Machine learning">
+      <div>
+        <div class="meta">2026 · MSc capstone · Graded Excellent</div>
+        <h2>Football match data vs bookmaker odds</h2>
+        <p>Tested in Python whether match performance data adds predictive value beyond bookmaker odds, using McNemar's test, a chronological split and 5-fold cross-validation. It did not (p = 0.579, 1.0 and 0.46). Along the way I found and fixed a data-loss bug caused by mixed date formats, and removed data leakage from an early model.</p>
+        <div class="chips"><span class="chip">Python</span><span class="chip">Statistics</span><span class="chip">Machine learning</span></div>
+      </div>
+      <div class="stat"><b>Excellent</b><span>capstone grade</span></div>
+    </div>
+
+    <div class="project static" data-tools="Power BI|Tableau|Accessibility">
+      <div>
+        <div class="meta">2026 · MSc data visualisation portfolio</div>
+        <h2>Retail case study in Power BI, compared with Tableau</h2>
+        <p>Built a Power BI case study on a 15,000-record retail dataset, compared Tableau with Power BI, and checked the dashboards against WCAG accessibility guidelines.</p>
+        <div class="chips"><span class="chip">Power BI</span><span class="chip">Tableau</span><span class="chip">Accessibility</span></div>
+      </div>
+      <div class="stat"><b>15k</b><span>retail records</span></div>
+    </div>
 
   </div>
   <p class="empty" id="empty">No projects use that tool yet.</p>
