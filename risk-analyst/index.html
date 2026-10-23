@@ -53,6 +53,11 @@ button { font: inherit; }
 .navs { margin-left: auto; display: flex; gap: 22px; align-items: center; }
 .navs a { font-family: "Barlow Condensed", sans-serif; font-weight: 700; font-size: 15px; text-transform: uppercase; color: #d6e1f0; line-height: 1.05; text-align: center; }
 .navs a:hover { color: var(--accent); }
+.navs a { white-space: nowrap; }
+@media (max-width: 480px) { .navs { gap: 8px; } .navs .homebtn, .navs .cta { padding: 8px 10px; } .who b { font-size: 14px; } }
+.navs .homebtn { display: flex; align-items: center; gap: 6px; border: 1px solid #2a4268; padding: 8px 12px; border-radius: 8px; }
+.navs .homebtn svg { width: 18px; height: 18px; }
+.navs .homebtn:hover { border-color: var(--accent); }
 .navs .cta { background: var(--accent); color: var(--accent-ink); padding: 9px 14px; border-radius: 8px; }
 .navs .cta:hover { color: var(--accent-ink); filter: brightness(1.06); }
 
@@ -182,7 +187,6 @@ a.ball { text-decoration: none; }
   .promo { grid-row: 1 / span 2; grid-column: 3; }
 }
 @media (max-width: 900px) {
-  .navs a:not(.cta) { display: none; }
   .term { grid-template-columns: minmax(0, 1fr); padding: 10px 10px 90px; }
   .rail { position: sticky; top: 60px; z-index: 20; flex-direction: row; overflow-x: auto; background: var(--frame); padding: 8px 0; margin: -10px 0 0; }
   .rail a { width: 46px; height: 46px; flex: none; }
@@ -208,10 +212,7 @@ a.ball { text-decoration: none; }
     <a class="home" href="#top" aria-label="Sai Yashwant Tavva, back to top"><img src="../assets/profile.jpg" alt="" width="44" height="44"></a>
     <div class="who"><b>Sai Yashwant Tavva</b><span>Risk Analyst · Portfolio</span></div>
     <nav class="navs" aria-label="Sections">
-      <a href="#markets">Why<br>me</a>
-      <a href="#coupon">Projects &amp;<br>form</a>
-      <a href="#trending">Skills</a>
-      <a href="#notice">Candidate<br>notice</a>
+      <a class="homebtn" href="../" aria-label="Home: main portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>Home</a>
       <a class="cta" href="mailto:yashwant06@gmail.com?subject=Risk%20Analyst%20application%20-%20Sai%20Yashwant%20Tavva">Email me</a>
     </nav>
   </div>
