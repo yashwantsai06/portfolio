@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sai Yashwant Tavva · Risk Analyst application</title>
+<meta name="description" content="Sai Yashwant Tavva: betting data, statistical testing and SQL, applying for a Risk Analyst role at Entain.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0e1726;
+  --ink-2: #16233a;
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #121a26;
+  --muted: #566176;
+  --line: #e2e6ec;
+  --accent: #0f7b6c;
+  --accent-ink: #5fd3c0;
+  --amber: #b26a00;
+  --chip: #eef1f5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b111c; --surface: #121b2a; --text: #e8edf4; --muted: #9aa6b8;
+    --line: #223049; --accent: #3cc2ac; --chip: #182437; --amber: #f0a43a;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b111c; --surface: #121b2a; --text: #e8edf4; --muted: #9aa6b8;
+  --line: #223049; --accent: #3cc2ac; --chip: #182437; --amber: #f0a43a;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+.mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+/* ---------- hero (always dark) ---------- */
+.hero { background: radial-gradient(1200px 500px at 85% -10%, #1d3554 0%, transparent 60%), var(--ink); color: #e9eef6; }
+.hero nav { display: flex; justify-content: space-between; align-items: center; height: 60px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.hero nav .name { font-weight: 600; letter-spacing: .01em; }
+.hero nav .links { display: flex; gap: 20px; font-size: 14px; align-items: center; }
+.hero nav .links a { color: #aab6c8; }
+.hero nav .links a:hover { color: #fff; text-decoration: none; }
+.icon-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: transparent; color: #e9eef6; cursor: pointer; font-size: 15px; }
+.hero-body { padding: 72px 0 56px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: end; }
+.tag { display: inline-flex; gap: 8px; align-items: center; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); }
+.tag::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-ink); box-shadow: 0 0 0 4px rgba(95,211,192,.18); }
+h1 { font-size: clamp(32px, 5.2vw, 50px); line-height: 1.08; letter-spacing: -0.02em; margin: 16px 0 16px; font-weight: 700; }
+.lead { color: #b8c3d3; font-size: 18px; margin: 0; max-width: 560px; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; padding: 11px 18px; border-radius: 8px; font-weight: 600; font-size: 15px; border: 1px solid rgba(255,255,255,.18); color: #e9eef6; }
+.btn:hover { text-decoration: none; border-color: var(--accent-ink); }
+.btn.primary { background: var(--accent-ink); border-color: var(--accent-ink); color: #06201b; }
+
+/* risk-register style summary panel */
+.register { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: 12px; padding: 18px; font-size: 14px; }
+.register h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #8fa0b8; margin: 0 0 12px; font-weight: 500; }
+.register dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 14px; }
+.register dt { color: #8fa0b8; }
+.register dd { margin: 0; color: #e9eef6; }
+
+/* ---------- body ---------- */
+section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+.section-h { display: flex; align-items: baseline; gap: 14px; margin-bottom: 26px; }
+.section-h .num { color: var(--accent); font-size: 13px; }
+.section-h h2 { margin: 0; font-size: 24px; letter-spacing: -0.01em; }
+.intro { color: var(--muted); max-width: 720px; margin: -10px 0 26px; }
+
+.evidence { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+.card .k { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 600; }
+.card h3 { margin: 8px 0 8px; font-size: 18px; letter-spacing: -0.01em; }
+.card p { margin: 0 0 10px; color: var(--muted); font-size: 15px; }
+.card .figure { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); line-height: 1.1; margin: 4px 0 10px; }
+.card .figure small { font-size: 14px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+.card a.more { font-weight: 600; font-size: 14px; }
+
+.projects { display: grid; gap: 14px; }
+.proj { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; color: inherit; }
+a.proj:hover { text-decoration: none; border-color: var(--accent); }
+.proj .meta { font-size: 13px; color: var(--muted); }
+.proj h3 { margin: 2px 0 6px; font-size: 18px; }
+.proj p { margin: 0; color: var(--muted); font-size: 15px; }
+.proj .go { align-self: center; font-weight: 600; color: var(--accent); white-space: nowrap; font-size: 14px; }
+
+.timeline { display: grid; gap: 0; }
+.row { display: grid; grid-template-columns: 170px 1fr; gap: 6px 28px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.row:last-child { border-bottom: 0; }
+.row .when { color: var(--muted); font-size: 13px; padding-top: 3px; }
+.row h3 { margin: 0 0 2px; font-size: 17px; }
+.row .org { margin: 0; color: var(--muted); font-size: 15px; }
+.row.highlight h3::after { content: "Current"; margin-left: 10px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 8px; vertical-align: 3px; }
+
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.skills h3 { font-size: 15px; margin: 0 0 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 13px; padding: 5px 11px; border-radius: 999px; background: var(--chip); border: 1px solid var(--line); }
+.skills .lead-group .chip { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+
+.contact { border-bottom: 0; }
+.contact p { color: var(--muted); max-width: 620px; font-size: 17px; }
+.contact .cta .btn { color: var(--text); border-color: var(--line); background: var(--surface); }
+.contact .cta .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+footer { padding: 26px 0 44px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+
+@media (max-width: 760px) {
+  .hero-body { grid-template-columns: 1fr; padding: 48px 0 40px; }
+  .hero nav .links a.hide-sm { display: none; }
+  .row { grid-template-columns: 1fr; }
+  .proj { grid-template-columns: 1fr; }
+}
+</style>
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <nav aria-label="Main">
+      <span class="name">Sai Yashwant Tavva</span>
+      <div class="links">
+        <a class="hide-sm" href="#evidence">Evidence</a>
+        <a class="hide-sm" href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button class="icon-btn" id="theme-btn" aria-label="Toggle dark mode">◐</button>
+      </div>
+    </nav>
+    <div class="hero-body">
+      <div>
+        <span class="tag mono">Application · Risk Analyst · Entain</span>
+        <h1>I look for the risk hiding behind the headline number.</h1>
+        <p class="lead">I already work at Entain, I wrote my MSc capstone on football data and bookmaker odds, and I spent two years as a developer writing SQL. I'd like to bring that mix to Entain's risk team.</p>
+        <div class="cta">
+          <a class="btn primary" href="mailto:yashwant06@gmail.com">Email me</a>
+          <a class="btn" href="https://www.linkedin.com/in/saiyashwant/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="#projects">See the work</a>
+        </div>
+      </div>
+      <div class="register" aria-label="Summary">
+        <h2 class="mono">At a glance</h2>
+        <dl>
+          <dt>Now</dt><dd>Customer Service Manager, Entain (part-time, London)</dd>
+          <dt>Study</dt><dd>MSc Business Analytics, The University of Law</dd>
+          <dt>Capstone</dt><dd>Football data vs bookmaker odds, graded Excellent</dd>
+          <dt>Tools</dt><dd>SQL, Python, Power BI, Tableau, Excel</dd>
+          <dt>Based</dt><dd>London</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section id="evidence">
+    <div class="wrap">
+      <div class="section-h"><span class="num mono">01</span><h2>Why I fit a Risk Analyst role</h2></div>
+      <div class="evidence">
+        <div class="card">
+          <div class="k">Betting data and odds</div>
+          <h3>I've tested a model against the bookmaker</h3>
+          <div class="figure">p = 0.579 <small>McNemar's test</small></div>
+          <p>My MSc capstone asked whether match performance data adds predictive value beyond bookmaker odds. Using McNemar's test, a chronological split and 5-fold cross-validation, it did not (p = 0.579, 1.0 and 0.46).</p>
+          <p>On the way I found a data-loss bug caused by mixed date formats and removed data leakage from an early model: the kind of error that makes a model look better than it is.</p>
+        </div>
+        <div class="card">
+          <div class="k">Questioning the headline</div>
+          <h3>A 69.6% SLA that was really 38.8%</h3>
+          <div class="figure">1.96M <small>requests analysed</small></div>
+          <p>In a case study on 1.96 million real service requests, the headline 48-hour SLA read 69.6%. One fast team was masking everyone else: without it, performance was 38.8%.</p>
+          <p>I flagged 28,503 records closed the second they were opened and kept them out of the figures, with every exclusion still countable for audit.</p>
+          <a class="more" href="../projects/service-ops/">Open the dashboard →</a>
+        </div>
+        <div class="card">
+          <div class="k">Inside the business</div>
+          <h3>I already work at Entain</h3>
+          <div class="figure">Mar 2026 <small>to now</small></div>
+          <p>As a Customer Service Manager at Entain I see the customer side of betting every week, so I understand the business the risk team protects.</p>
+          <p>Before that I was a developer for two years, writing and tuning SQL Server queries, including one rewrite that cut latency by 30%.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-h"><span class="num mono">02</span><h2>Projects</h2></div>
+      <div class="projects">
+        <div class="proj">
+          <div>
+            <div class="meta">2026 · MSc capstone · Graded Excellent · Python</div>
+            <h3>Football match data vs bookmaker odds</h3>
+            <p>Statistical testing of whether performance data beats the odds, with chronological validation, cross-validation, and fixes for data loss and leakage.</p>
+          </div>
+        </div>
+        <a class="proj" href="../projects/service-ops/">
+          <div>
+            <div class="meta">Oct 2026 · SQL, Python, live dashboard</div>
+            <h3>Service Operations MI dashboard</h3>
+            <p>Star-schema SQL model and interactive dashboard on 1.96M requests: SLA performance, data-quality flags, demand patterns and recommendations.</p>
+          </div>
+          <span class="go">Open →</span>
+        </a>
+        <a class="proj" href="../projects/uk-rental/">
+          <div>
+            <div class="meta">May 2026 · Tableau</div>
+            <h3>UK rental property dashboard</h3>
+            <p>Rent, revenue and occupancy across four UK cities, built as an interactive Tableau dashboard.</p>
+          </div>
+          <span class="go">Open →</span>
+        </a>
+        <a class="proj" href="../projects/solar/">
+          <div>
+            <div class="meta">May 2026 · Tableau</div>
+            <h3>Solar array output: actual vs forecast</h3>
+            <p>Power output by month and site, with actual generation tracked against the forecast hour by hour.</p>
+          </div>
+          <span class="go">Open →</span>
+        </a>
+        <div class="proj">
+          <div>
+            <div class="meta">2026 · MSc · Power BI and Tableau</div>
+            <h3>Retail case study and tool comparison</h3>
+            <p>Power BI case study on a 15,000-record retail dataset, compared with Tableau and checked against WCAG accessibility guidelines.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-h"><span class="num mono">03</span><h2>Skills</h2></div>
+      <div class="skills">
+        <div class="lead-group">
+          <h3>Betting and risk</h3>
+          <div class="chips">
+            <span class="chip">Football betting data</span><span class="chip">Bookmaker odds analysis</span><span class="chip">Live decision making</span><span class="chip">Risk analysis</span><span class="chip">Escalation</span><span class="chip">Audit trail</span><span class="chip">Decision logging</span><span class="chip">Safer Gambling</span><span class="chip">AML</span><span class="chip">Think 25</span>
+          </div>
+        </div>
+        <div class="lead-group">
+          <h3>Data and analytics</h3>
+          <div class="chips">
+            <span class="chip">SQL (PostgreSQL, Microsoft SQL Server)</span><span class="chip">Python</span><span class="chip">Data warehouse sourcing</span><span class="chip">Data validation</span><span class="chip">Rule and model testing</span><span class="chip">Statistical testing</span><span class="chip">Risk metrics reporting</span><span class="chip">Power BI</span><span class="chip">Tableau</span><span class="chip">Excel</span><span class="chip">GA4</span>
+          </div>
+        </div>
+        <div>
+          <h3>Communication</h3>
+          <div class="chips">
+            <span class="chip">Concise reporting</span><span class="chip">Written recommendations</span><span class="chip">Updates to management</span><span class="chip">Team coordination</span><span class="chip">Customer service</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-h"><span class="num mono">04</span><h2>Experience and education</h2></div>
+      <div class="timeline">
+        <div class="row highlight">
+          <div class="when mono">Mar 2026 – now</div>
+          <div><h3>Customer Service Manager</h3><p class="org">Entain · Part-time · London</p></div>
+        </div>
+        <div class="row">
+          <div class="when mono">2025 – 2028</div>
+          <div><h3>MSc Business Analytics</h3><p class="org">The University of Law, London</p></div>
+        </div>
+        <div class="row">
+          <div class="when mono">Jul – Aug 2026</div>
+          <div><h3>Micro-Internship, Rolls-Royce project</h3><p class="org">Springpod · Supply chain plan graded Excellent</p></div>
+        </div>
+        <div class="row">
+          <div class="when mono">Sep 2024 – Jul 2025</div>
+          <div><h3>Angular Developer</h3><p class="org">Drucare · Full-time · Remote</p></div>
+        </div>
+        <div class="row">
+          <div class="when mono">Oct 2023 – Sep 2024</div>
+          <div><h3>Associate Consultant (from Trainee Consultant)</h3><p class="org">ProvenTech Consulting · Angular, .NET, SQL Server</p></div>
+        </div>
+        <div class="row">
+          <div class="when mono">2018 – 2022</div>
+          <div><h3>BTech, Electrical and Communications Engineering</h3><p class="org">Vaagdevi Engineering College</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="section-h"><span class="num mono">05</span><h2>Contact</h2></div>
+      <p>Thank you for reading. I'd be glad to talk through any of this work, or how I'd approach risk analysis at Entain.</p>
+      <div class="cta">
+        <a class="btn primary" href="mailto:yashwant06@gmail.com">yashwant06@gmail.com</a>
+        <a class="btn" href="https://www.linkedin.com/in/saiyashwant/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="../">Full portfolio</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Sai Yashwant Tavva · Personal portfolio prepared for a job application. Not affiliated with or endorsed by Entain plc or its brands.</div>
+</footer>
+
+<script>
+document.getElementById('theme-btn').addEventListener('click', function () {
+  var root = document.documentElement;
+  var cur = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('theme', next); } catch (e) {}
+});
+</script>
+</body>
+</html>
