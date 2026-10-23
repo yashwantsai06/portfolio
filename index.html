@@ -177,6 +177,10 @@ footer { padding: 32px 0 48px; color: var(--muted); font-size: 13px; border-top:
 
 .chip { cursor: pointer; user-select: none; transition: background .15s, color .15s, border-color .15s; }
 .chip:hover { border-color: var(--accent); }
+.chips .chip:not(.static) { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.chip.static { cursor: default; color: var(--muted); }
+.chip.static:hover { border-color: var(--line); }
+.chip-demo { padding: 1px 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); background: var(--chip); color: var(--text); font-size: 13px; }
 .chip.on { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .skill-hint { font-size: 14px; color: var(--muted); margin: -12px 0 22px; }
 .filter-bar {
@@ -255,7 +259,7 @@ body.filtering .card.match { border-color: var(--accent); }
 <section id="work">
   <div class="wrap">
     <h2>Selected work</h2>
-    <a class="card feature" href="projects/service-ops/" data-skills="Data analysis|Performance analysis">
+    <a class="card feature" href="projects/service-ops/" data-skills="Data analysis|Performance analysis|Python|Data validation">
       <div class="feature-text">
         <div class="where" style="margin:0 0 8px">Live project · BI case study</div>
         <h3>Service Operations MI dashboard</h3>
@@ -265,7 +269,7 @@ body.filtering .card.match { border-color: var(--accent); }
       <div class="feature-stat"><div class="metric">1.96M</div><div class="where" style="margin:0">requests analysed</div></div>
     </a>
     <div class="grid">
-      <div class="card" data-skills="SQL Server|Query optimisation|.NET">
+      <div class="card" data-skills="Microsoft SQL Server|Query optimisation|.NET">
         <div class="metric">30%</div>
         <h3>Faster SQL queries</h3>
         <p>Rewrote slow SQL Server queries behind a production web app and cut response latency by 30%.</p>
@@ -297,7 +301,7 @@ body.filtering .card.match { border-color: var(--accent); }
   <div class="wrap">
     <h2>Experience</h2>
 
-    <div class="job" data-skills="Power BI|Performance analysis|Data analysis">
+    <div class="job" data-skills="Power BI|Performance analysis|Data analysis|Customer service">
       <div class="when">Mar 2026 – now</div>
       <div>
         <h3>Customer Service Manager</h3>
@@ -331,7 +335,7 @@ body.filtering .card.match { border-color: var(--accent); }
       </div>
     </div>
 
-    <div class="job" data-skills="Angular|TypeScript|C#|.NET|ASP.NET|REST APIs|SQL Server|Query optimisation|Unit testing|UI/UX">
+    <div class="job" data-skills="Angular|TypeScript|C#|.NET|ASP.NET|REST APIs|Microsoft SQL Server|Query optimisation|Unit testing|UI/UX">
       <div class="when">Oct 2023 – Sep 2024</div>
       <div>
         <h3>Associate Consultant <span style="font-weight:400;color:var(--muted)">(from Trainee Consultant)</span></h3>
@@ -367,12 +371,24 @@ body.filtering .card.match { border-color: var(--accent); }
 <section id="skills">
   <div class="wrap">
     <h2>Skills</h2>
-    <p class="skill-hint">Tap a skill to see where I've used it.</p>
+    <p class="skill-hint">Tap a <span class="chip-demo">highlighted</span> skill to see where I've used it on this page.</p>
     <div class="skills">
       <div>
-        <h3>Data &amp; BI</h3>
+        <h3>Data and analytics</h3>
         <div class="chips">
-          <span class="chip">Power BI</span><span class="chip">SQL Server</span><span class="chip">Data analysis</span><span class="chip">Performance analysis</span><span class="chip">Query optimisation</span>
+          <span class="chip">Microsoft SQL Server</span><span class="chip">PostgreSQL</span><span class="chip">Python</span><span class="chip">Power BI</span><span class="chip">Tableau</span><span class="chip">Excel</span><span class="chip">GA4</span><span class="chip">Data warehouse sourcing</span><span class="chip">Data validation</span><span class="chip">Rule and model testing</span><span class="chip">Statistical testing</span><span class="chip">Risk metrics reporting</span><span class="chip">Data analysis</span><span class="chip">Performance analysis</span><span class="chip">Query optimisation</span>
+        </div>
+      </div>
+      <div>
+        <h3>Betting and risk</h3>
+        <div class="chips">
+          <span class="chip">Football betting data</span><span class="chip">Bookmaker odds analysis</span><span class="chip">Live decision making</span><span class="chip">Risk analysis</span><span class="chip">Escalation</span><span class="chip">Audit trail</span><span class="chip">Decision logging</span><span class="chip">Safer Gambling</span><span class="chip">AML</span><span class="chip">Think 25</span>
+        </div>
+      </div>
+      <div>
+        <h3>Communication</h3>
+        <div class="chips">
+          <span class="chip">Concise reporting</span><span class="chip">Written recommendations</span><span class="chip">Updates to management</span><span class="chip">Team coordination</span><span class="chip">Customer service</span>
         </div>
       </div>
       <div>
@@ -436,7 +452,7 @@ body.filtering .card.match { border-color: var(--accent); }
 <section id="education">
   <div class="wrap">
     <h2>Education</h2>
-    <div class="job" data-skills="Power BI|Data analysis|Performance analysis">
+    <div class="job" data-skills="Power BI|Data analysis|Performance analysis|Python|Statistical testing|Football betting data|Bookmaker odds analysis|Data validation|Rule and model testing|Tableau">
       <div class="when">2025 – 2028</div>
       <div>
         <h3>MSc Business Analytics</h3>
@@ -630,6 +646,12 @@ body.filtering .card.match { border-color: var(--accent); }
     items.forEach(function (i) { i.classList.remove('match', 'dim'); });
     fbar.classList.remove('show');
   }
+  chips = Array.prototype.filter.call(chips, function (chip) {
+    var name = chip.textContent.trim();
+    var used = Array.prototype.some.call(items, function (i) { return i.getAttribute('data-skills').split('|').indexOf(name) > -1; });
+    if (!used) chip.classList.add('static');
+    return used;
+  });
   chips.forEach(function (chip) {
     chip.setAttribute('role', 'button');
     chip.setAttribute('tabindex', '0');
